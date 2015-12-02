@@ -14,73 +14,53 @@
 
 @interface ViewController ()
 
+//String
 @property (nonatomic, copy) NSString *cpStr;
 @property (nonatomic, strong) NSString *stStr;
-@property (nonatomic, copy) NSMutableString *cpMutStr;
 
+//Mut String
+@property (nonatomic, copy) NSMutableString *cpMutStr;
+@property (nonatomic, strong) NSMutableString *stMutStr;
+
+//Array
 @property (nonatomic, copy) NSArray *cpAry;
 @property (nonatomic, strong) NSArray *stAry;
-@property (nonatomic, copy) NSMutableArray *cpMutAry;
 
+//Mut Array
+@property (nonatomic, copy) NSMutableArray *cpMutAry;
+@property (nonatomic, strong) NSMutableArray *stMutAry;
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    [self stringCopyTest];
-    [self mutableStringCopyTest];
-    [self arrayCopyTest];
-    [self mutableArrayCopyTest];
-    
-    NSMutableString *mutStr = [@"123" mutableCopy];
-    [self logAddress:mutStr];
-    self.cpStr = mutStr;
-    [self logAddress:self.cpStr];
-    self.stStr = mutStr;
-    [self logAddress:self.stStr];
-    
-    self.cpMutStr = mutStr;
-    [self logAddress:self.cpMutStr];
-//    [self.cpMutStr appendString:@"123"];
-    
-    [mutStr appendString:@"456"];
-    NSLog(@"%@", mutStr);
-    NSLog(@"%@", self.cpStr);
-    NSLog(@"%@", self.stStr);
-    
-    NSMutableArray *mutAry = [@[@1, @2, @3] mutableCopy];
-    [self logAddress:mutAry];
-    self.cpAry = mutAry;
-    [self logAddress:self.cpAry];
-    self.stAry = mutAry;
-    [self logAddress:self.stAry];
-    self.cpMutAry = mutAry;
-    [self logAddress:self.cpMutAry];
-    
-    [mutAry addObject:@4];
-    NSLog(@"%@", mutAry);
-    NSLog(@"%@", self.cpAry);
-    NSLog(@"%@", self.stAry);
+    [self stringTest];
+    [self arrayTest];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark String
+
+- (void)stringTest
+{
+    [self stringCopyTest];
+    [self mutableStringCopyTest];
+    [self stringPropertyTest];
+    [self mutableStringPropertyTest];
 }
 
 - (void)stringCopyTest
 {
     LOG_METHOD_NAME
     NSString *str = @"Hello";
-    [self logAddress:str];
+    LOG_OBJ_ADDRESS(str);
     NSString *cpStr = [str copy];
-    [self logAddress:cpStr];
+    LOG_OBJ_ADDRESS(cpStr);
     NSMutableString *mutCpStr = [str mutableCopy];
-    [self logAddress:mutCpStr];
+    LOG_OBJ_ADDRESS(mutCpStr);
     LOG_END
 }
 
@@ -88,23 +68,76 @@
 {
     LOG_METHOD_NAME
     NSMutableString *mutStr = [@"OC" mutableCopy];
-    [self logAddress:mutStr];
+    LOG_OBJ_ADDRESS(mutStr);
     NSMutableString *cpMutStr = [mutStr copy];
-    [self logAddress:cpMutStr];
+    LOG_OBJ_ADDRESS(cpMutStr);
     NSMutableString *mutCpMutStr = [mutStr mutableCopy];
-    [self logAddress:mutCpMutStr];
+    LOG_OBJ_ADDRESS(mutCpMutStr);
     LOG_END
+}
+
+- (void)stringPropertyTest
+{
+    LOG_METHOD_NAME
+    NSMutableString *mutStr = [@"123" mutableCopy];
+    LOG_OBJ_ADDRESS(mutStr);
+    self.cpStr = mutStr;
+    LOG_OBJ_ADDRESS(self.cpStr);
+    self.stStr = mutStr;
+    LOG_OBJ_ADDRESS(self.stStr);
+    NSLog(@"修改前");
+    NSLog(@"mutStr：%@", mutStr);
+    NSLog(@"copy：%@", self.cpStr);
+    NSLog(@"strong：%@", self.stStr);
+    [mutStr appendString:@"456"];
+    NSLog(@"修改后");
+    NSLog(@"mutStr：%@", mutStr);
+    NSLog(@"copy：%@", self.cpStr);
+    NSLog(@"strong：%@", self.stStr);
+    LOG_END
+}
+
+- (void)mutableStringPropertyTest
+{
+    LOG_METHOD_NAME
+    NSMutableString *mutStr = [@"123" mutableCopy];
+    LOG_OBJ_ADDRESS(mutStr);
+    self.cpMutStr = mutStr;
+    LOG_OBJ_ADDRESS(self.cpMutStr);
+    self.stMutStr = mutStr;
+    LOG_OBJ_ADDRESS(self.stMutStr);
+    NSLog(@"修改前");
+    NSLog(@"mutStr：%@", mutStr);
+    NSLog(@"copy：%@", self.cpMutStr);
+    NSLog(@"strong：%@", self.stMutStr);
+    [mutStr appendString:@"456"];
+    NSLog(@"修改后");
+    NSLog(@"mutStr：%@", mutStr);
+    NSLog(@"copy：%@", self.cpMutStr);
+    NSLog(@"strong：%@", self.stMutStr);
+//  [self.cpMutStr appendString:@"789"]; crash
+    LOG_END
+}
+
+#pragma mark Array
+
+- (void)arrayTest
+{
+    [self arrayCopyTest];
+    [self mutableArrayCopyTest];
+    [self aryPropertyTest];
+    [self mutableAryPropertyTest];
 }
 
 - (void)arrayCopyTest
 {
     LOG_METHOD_NAME
     NSArray *ary = @[@1, @2, @3];
-    [self logAddress:ary];
+    LOG_OBJ_ADDRESS(ary);
     NSArray *cpAry = [ary copy];
-    [self logAddress:cpAry];
+    LOG_OBJ_ADDRESS(cpAry);
     NSMutableArray *mutCpAry = [ary mutableCopy];
-    [self logAddress:mutCpAry];
+    LOG_OBJ_ADDRESS(mutCpAry);
     LOG_END
 }
 
@@ -112,17 +145,55 @@
 {
     LOG_METHOD_NAME
     NSMutableArray *mutAry = [@[@1, @2, @3] mutableCopy];
-    [self logAddress:mutAry];
+    LOG_OBJ_ADDRESS(mutAry);
     NSArray *cpMutAry = [mutAry copy];
-    [self logAddress:cpMutAry];
+    LOG_OBJ_ADDRESS(cpMutAry);
     NSMutableArray *mutCpMutAry = [mutAry mutableCopy];
-    [self logAddress:mutCpMutAry];
+    LOG_OBJ_ADDRESS(mutCpMutAry);
     LOG_END
 }
 
-- (void)logAddress:(id)obj
+- (void)aryPropertyTest
 {
-    LOG_OBJ_ADDRESS(obj)
+    LOG_METHOD_NAME
+    NSMutableArray *mutAry = [@[@1, @2, @3] mutableCopy];
+    LOG_OBJ_ADDRESS(mutAry);
+    self.cpAry = mutAry;
+    LOG_OBJ_ADDRESS(self.cpAry);
+    self.stAry = mutAry;
+    LOG_OBJ_ADDRESS(self.stAry);
+    NSLog(@"修改前");
+    NSLog(@"mutAry：%@", mutAry);
+    NSLog(@"copy：%@", self.cpAry);
+    NSLog(@"strong：%@", self.stAry);
+    [mutAry addObjectsFromArray:@[@4, @5, @6]];
+    NSLog(@"修改后");
+    NSLog(@"mutAry：%@", mutAry);
+    NSLog(@"copy：%@", self.cpAry);
+    NSLog(@"strong：%@", self.stAry);
+    LOG_END
+}
+
+- (void)mutableAryPropertyTest
+{
+    LOG_METHOD_NAME
+    NSMutableArray *mutAry = [@[@1, @2, @3] mutableCopy];
+    LOG_OBJ_ADDRESS(mutAry);
+    self.cpMutAry = mutAry;
+    LOG_OBJ_ADDRESS(self.cpMutAry);
+    self.stMutAry = mutAry;
+    LOG_OBJ_ADDRESS(self.stMutAry);
+    NSLog(@"修改前");
+    NSLog(@"mutAry：%@", mutAry);
+    NSLog(@"copy：%@", self.cpMutAry);
+    NSLog(@"strong：%@", self.stMutAry);
+    [mutAry addObjectsFromArray:@[@4, @5, @6]];
+    NSLog(@"修改后");
+    NSLog(@"mutAry：%@", mutAry);
+    NSLog(@"copy：%@", self.cpMutAry);
+    NSLog(@"strong：%@", self.stMutAry);
+//  self.cpMutAry addObject:@1]; crash
+    LOG_END
 }
 
 
